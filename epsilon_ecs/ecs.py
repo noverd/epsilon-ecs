@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
-from typing import Dict, Set
+from typing import Dict, Set, TypeVar, get_args
 
-frozen_dataclass = dataclass(slots=True, unsafe_hash=True)  # Base component decorator
+hashing_dataclass = dataclass(slots=True, unsafe_hash=True)  # Base component decorator
+
+TC = TypeVar("TC")
 
 
 class Component(object):
@@ -37,9 +39,10 @@ class Entity:
         """
         self.components.add(component)
 
-    def get_component(self, component_type: type) -> Component | None:
+    def get_component(self, component_type: TC) -> TC | None:
         """
         Searches for a component by component_type
+        :type component_type: Component children
         :param component_type: Type of component
         :return: Component or None if there is no such component
         """
@@ -47,7 +50,7 @@ class Entity:
             if isinstance(comp, component_type):
                 return comp
 
-    def remove_component(self, component_type: type) -> bool:
+    def remove_component(self, component_type: TC) -> bool:
         """
         Searching and removing a component from self.components
         :param component_type: Type of component

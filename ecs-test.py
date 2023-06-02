@@ -1,14 +1,14 @@
 import unittest
-from epsilon_ecs import Entity, Component, frozen_dataclass, System, World
+from epsilon_ecs import Entity, Component, hashing_dataclass, System, World
 
 
-@frozen_dataclass
+@hashing_dataclass
 class PositionComponent(Component):
     x: int
     y: int
 
 
-@frozen_dataclass
+@hashing_dataclass
 class VelocityComponent(Component):
     x_speed: int
     y_speed: int
