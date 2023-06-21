@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
-from typing import Dict, Set, TypeVar, get_args
+from typing import Dict, Set, TypeVar
 
 hashing_dataclass = dataclass(slots=True, unsafe_hash=True)  # Base component decorator
 
