@@ -1,10 +1,11 @@
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
-from typing import Dict, Set, TypeVar
+from typing import Dict, Set, TypeVar, Iterable, List
 
-hashing_dataclass = dataclass(slots=True, unsafe_hash=True)  # Base component decorator
 
 TC = TypeVar("TC")
+
+component = dataclass(slots=True)
 
 
 class Component(object):
@@ -16,20 +17,18 @@ class Entity:
     Base entity class for all entities.
     """
 
-    def __init__(self, components: Set[Component] = None):
+    def __init__(self, components: Iterable[Component] = None, owner: "Entity" = None):
         """
         :param components: Set of components for entity
         """
-        if isinstance(components, set):
-            self.components: Set[Component] = components
-        else:
-            self.components: Set[Component] = set()
+        self.components: List[Component] = [*components]
+        self.owner: Entity = owner
 
     def __repr__(self) -> str:
-        return f"Entity(components={self.components})"
+        return f"Entity(components={self.components}, owner={self.owner})"
 
     def __str__(self) -> str:
-        return f"Entity(components={self.components})"
+        return f"Entity(components={self.components}, owner={self.owner})"
 
     def add_component(self, component: Component) -> None:
         """
@@ -37,7 +36,7 @@ class Entity:
         :param component: Component to add
         :return: None
         """
-        self.components.add(component)
+        self.components.append(component)
 
     def get_component(self, component_type: TC) -> TC | None:
         """
@@ -56,9 +55,9 @@ class Entity:
         :param component_type: Type of component
         :return: True if the component is found and removed, False otherwise
         """
-        for comp in self.components:
+        for x, comp in enumerate(self.components):
             if isinstance(comp, component_type):
-                self.components.remove(comp)
+                del self.components[x]
                 return True
         return False
 
